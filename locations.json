@@ -1,0 +1,38 @@
+[
+    {
+        "name": "Road station (GTK)",
+        "latitude": 67.367070,
+        "longitude": 26.651170,
+        "description": "Road station with 5 Percometers. Temperaure measurements between 15-110cm.",
+        "Measured_variable": "Road-bed temperature (TR)",
+        "Measurement_type": "sensor_data",
+        "url": "https://litdb.fmi.fi/ext0001_data.php"
+    },
+    {
+        "name": "Oulanka",
+       "latitude": 66.371102,
+       "longitude": 29.317009,
+        "description": "Snow water equivalent monitoring at Oulanka Mantykenttä forest site.",
+        "Measured_variable": "snow Depth, SWE",
+        "Measurement_type": "sensor_data",
+        "url": "https://litdb.fmi.fi/ext0003_data.php"
+    },
+    {
+        "name": "Kiiminkijoki",
+        "latitude": 65.13057,
+        "longitude": 25.78547,
+        "description": "River ice monitoring camera deployed at Kiiminkijoki.",
+        "Measured_variable": "Temperature (TI), river ice,Temperature (TS), river snow",
+        "Measurement_type": "sensor_data",
+        "url": " https://litdb.fmi.fi/ext0004_data.php"
+    },
+    {
+        "name": "Pallas SIMBA station (SYKE)",
+        "latitude": 68.05972,
+        "longitude": 24.11611,
+        "description": "Temperature profile from SIMBA temperature sensor chain.",
+        "Measured_variable": "Temperature (T),Temperature before start of heating (T0),Temperature 90 seconds after heating (dT90),Temperature 120 seconds after heating (dT120)",
+        "Measurement_type": "sensor_data",
+        "url": "https://litdb.fmi.fi/ext0002_data.php"
+    }
+]

@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>FMI DATA</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        /* --- Top Navbar --- */
+        #navbar {
+            position: fixed;
+
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 60px;
+            background: #ffffff;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 15px;
+            z-index: 1000;
+        }
+
+        #navbar h1 {
+            margin: 0;
+            font-size: 18px;
+            color: #333;
+        }
+
+        .nav-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        /* --- Map --- */
+        #map {
+            position: absolute;
+            top: 60px;
+            left: 0;
+            right: 0;
+            bottom: 0;
+        }
+
+        /* --- Filter Panel --- */
+        #filter-panel {
+            position: fixed;
+            top: 70px;
+            left: 50px;
+            width: 300px;
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+            padding: 15px;
+            z-index: 950;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            height: 60%;
+            overflow-y: auto;
+        }
+
+        #filter-panel h2 {
+            margin: 0 0 10px;
+            font-size: 16px;
+            color: #333;
+        }
+
+        #filter-panel label {
+            font-size: 14px;
+            font-weight: bold;
+            margin-top: 5px;
+        }
+
+        #filter-panel select {
+            width: 100%;
+            min-height: 60px;
+            padding: 6px;
+            font-size: 14px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            background: #f9f9f9;
+        }
+
+        .buttons {
+            display: flex;
+            gap: 8px;
+        }
+
+        .buttons button {
+            flex: 1;
+            padding: 8px;
+            font-size: 14px;
+            border-radius: 6px;
+            border: none;
+            cursor: pointer;
+            background: #0078d7;
+            color: white;
+        }
+
+        .buttons button:hover {
+            background: #005fa3;
+        }
+
+        /* --- Theme Toggle --- */
+        .theme-toggle {
+            background: #f5f5f5;
+            color: #333;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            padding: 6px 10px;
+            cursor: pointer;
+            margin-right: 20px;
+        }
+
+        .theme-toggle:hover {
+            background: #e0e0e0;
+        }
+
+        /* --- Mobile Filter Toggle --- */
+        #toggle-filters {
+            display: none;
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 10px 15px;
+            border-radius: 30px;
+            background: #0078d7;
+            color: white;
+            border: none;
+            cursor: pointer;
+            z-index: 960;
+        }
+        #filter-panel select {
+    width: 100%;
+    min-height: 60px;
+    height: 160px;     /* ✅ sets scrollable height limit */
+    padding: 6px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    line-height: 1.6; /* adds breathing space between options */
+    border-radius: 6px;
+    background: #f9f9f9;
+    overflow-x: auto;       /* ✅ enables vertical scroll for options */
+    scrollbar-width: thin;  /* Firefox support */
+    scrollbar-color: #ccc #f9f9f9;
+}
+
+/* Custom scrollbar for Chrome / Edge */
+#filter-panel select::-webkit-scrollbar {
+    width: 8px;
+}
+#filter-panel select::-webkit-scrollbar-thumb {
+    background: #ccc;
+    border-radius: 4px;
+}
+#filter-panel select::-webkit-scrollbar-track {
+    background: #f9f9f9;
+}
+/* Make individual options more readable */
+#filter-panel select option {
+    padding: 6px 8px;           /* spacing between lines */
+    margin: 2px 0;              /* visual separation */
+}
+
+/* Hover effect (limited browser support but works in most modern ones) */
+#filter-panel select option:hover {
+    background-color: #0078d7;
+    color: white;
+}
+
+/* Scrollbar styling for long lists */
+#filter-panel select::-webkit-scrollbar {
+    width: 8px;
+}
+#filter-panel select::-webkit-scrollbar-thumb {
+    background: #ccc;
+    border-radius: 4px;
+}
+#filter-panel select::-webkit-scrollbar-track {
+    background: #f9f9f9;
+}
+        /* --- Footer --- */
+        #footer {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 50px;
+            background: #ffffff;
+            border-top: 1px solid #ddd;
+            box-shadow: 0 -2px 6px rgba(0,0,0,0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            font-size: 14px;
+            color: #333;
+            z-index: 1000;
+            padding: 0 15px;
+        }
+
+        #footer img {
+            height: 28px;
+            width: auto;
+        }
+
+        @media (max-width: 768px) {
+            #filter-panel {
+                left: 50%;
+                transform: translateX(-50%);
+                width: 90%;
+                bottom: 0;
+                top: auto;
+                max-height: 50%;
+                border-radius: 12px 12px 0 0;
+                display: none;
+            }
+
+            #toggle-filters {
+                display: block;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <div id="navbar">
+        <h1>CRYO Project</h1>
+        <div class="nav-actions">
+            <button class="theme-toggle" onclick="toggleTheme()">🌙 / ☀️</button>
+        </div>
+    </div>
+
+    <!-- Filter Panel -->
+    <div id="filter-panel">
+        <h2>🔍 Filters</h2>
+
+        <label for="locationFilter">Location</label>
+        <select id="locationFilter" multiple></select>
+
+        <label for="variableFilter">Variable</label>
+        <select id="variableFilter" multiple></select>
+
+        <label for="typeFilter">Type</label>
+        <select id="typeFilter" multiple></select>
+
+        <div class="buttons">
+            <button onclick="applyFilters()">Apply</button>
+            <button onclick="resetFilters()">Reset</button>
+        </div>
+
+        <!-- Placeholder for no results message inside panel -->
+        <div id="no-results-panel" style="display:none; color:#cc0000; font-weight:bold; text-align:center;">
+            ⚠️ No locations found for the selected filters.
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <div id="footer">
+        <span>Funded by the European Union — NextGenerationEU</span>
+        <img src="/static/images/EN Funded by the European Union_POS (1).jpg" alt="EU Logo" id="eu-logo">
+    </div>
+
+    <!-- Mobile toggle button -->
+    <button id="toggle-filters" onclick="toggleFilters()">⚙️ Filters</button>
+
+    <!-- Map -->
+    <div id="map"></div>
+
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script>
+        const map = L.map('map').setView([0, 0], 2);
+
+        const lightLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '© OpenStreetMap contributors'
+        });
+        const darkLayer = L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+            attribution: '&copy; OpenStreetMap &copy; CARTO'
+        });
+
+        lightLayer.addTo(map);
+        let currentLayer = lightLayer;
+
+        let allData = [];
+        let allMarkers = [];
+
+        fetch('/locations')
+            .then(res => res.json())
+            .then(data => {
+                allData = data;
+                populateFilters(data);
+                renderMarkers(data);
+            });
+
+        function populateFilters(data) {
+            const locSelect = document.getElementById("locationFilter");
+            const varSelect = document.getElementById("variableFilter");
+            const typeSelect = document.getElementById("typeFilter");
+
+            const locations = [...new Set(data.map(d => d.name))];
+            const variables = [...new Set(data.map(d => d.Measured_variable))];
+            const types = [...new Set(data.map(d => d.Measurement_type))];
+
+            locations.forEach(l => locSelect.add(new Option(l, l)));
+            variables.forEach(v => varSelect.add(new Option(v, v)));
+            types.forEach(t => typeSelect.add(new Option(t, t)));
+        }
+
+        function renderMarkers(data) {
+            allMarkers.forEach(m => map.removeLayer(m));
+            allMarkers = [];
+
+            data.forEach(loc => {
+                const marker = L.marker([loc.latitude, loc.longitude])
+                    .bindPopup(`
+                        <b>${loc.name}</b><br>
+                        ${loc.description}<br>
+                        Variable: ${loc.Measured_variable}<br>
+                        Type: ${loc.Measurement_type}<br>
+                        <a href="${loc.url}" target="_blank">More info</a>
+                    `)
+                    .addTo(map);
+                allMarkers.push(marker);
+            });
+
+            if (allMarkers.length > 0) {
+                const group = L.featureGroup(allMarkers);
+                map.fitBounds(group.getBounds().pad(0.2));
+            }
+        }
+
+        function applyFilters() {
+            const locValues = Array.from(document.getElementById("locationFilter").selectedOptions).map(o => o.value);
+            const varValues = Array.from(document.getElementById("variableFilter").selectedOptions).map(o => o.value);
+            const typeValues = Array.from(document.getElementById("typeFilter").selectedOptions).map(o => o.value);
+
+            const filtered = allData.filter(d => {
+                const locMatch = locValues.length ? locValues.includes(d.name) : true;
+                const varMatch = varValues.length ? varValues.includes(d.Measured_variable) : true;
+                const typeMatch = typeValues.length ? typeValues.includes(d.Measurement_type) : true;
+                return locMatch && varMatch && typeMatch;
+            });
+
+            renderMarkers(filtered);
+
+            // --- Show / hide "no results" message ---
+            const msgPanel = document.getElementById("no-results-panel");
+            if (filtered.length === 0) {
+                msgPanel.style.display = "block";
+            } else {
+                msgPanel.style.display = "none";
+            }
+        }
+
+        function resetFilters() {
+            document.getElementById("locationFilter").selectedIndex = -1;
+            document.getElementById("variableFilter").selectedIndex = -1;
+            document.getElementById("typeFilter").selectedIndex = -1;
+            renderMarkers(allData);
+            document.getElementById("no-results-panel").style.display = "none";
+        }
+
+        function toggleTheme() {
+            map.removeLayer(currentLayer);
+            if (currentLayer === lightLayer) {
+                darkLayer.addTo(map);
+                currentLayer = darkLayer;
+            } else {
+                lightLayer.addTo(map);
+                currentLayer = lightLayer;
+            }
+        }
+
+        function toggleFilters() {
+            const panel = document.getElementById("filter-panel");
+            panel.style.display = panel.style.display === "flex" ? "none" : "flex";
+        }
+    </script>
+</body>
+</html>
