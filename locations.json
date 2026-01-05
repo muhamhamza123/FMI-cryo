@@ -1,38 +1,172 @@
 [
-    {
-        "name": "Road station (GTK)",
-        "latitude": 67.367070,
-        "longitude": 26.651170,
-        "description": "Road station with 5 Percometers. Temperaure measurements between 15-110cm.",
-        "Measured_variable": "Road-bed temperature (TR)",
-        "Measurement_type": "sensor_data",
-        "url": "https://litdb.fmi.fi/ext0001_data.php"
-    },
-    {
-        "name": "Oulanka",
-       "latitude": 66.371102,
-       "longitude": 29.317009,
-        "description": "Snow water equivalent monitoring at Oulanka Mantykenttä forest site.",
-        "Measured_variable": "snow Depth, SWE",
-        "Measurement_type": "sensor_data",
-        "url": "https://litdb.fmi.fi/ext0003_data.php"
-    },
-    {
-        "name": "Kiiminkijoki",
-        "latitude": 65.13057,
-        "longitude": 25.78547,
-        "description": "River ice monitoring camera deployed at Kiiminkijoki.",
-        "Measured_variable": "Temperature (TI), river ice,Temperature (TS), river snow",
-        "Measurement_type": "sensor_data",
-        "url": " https://litdb.fmi.fi/ext0004_data.php"
-    },
-    {
-        "name": "Pallas SIMBA station (SYKE)",
-        "latitude": 68.05972,
-        "longitude": 24.11611,
-        "description": "Temperature profile from SIMBA temperature sensor chain.",
-        "Measured_variable": "Temperature (T),Temperature before start of heating (T0),Temperature 90 seconds after heating (dT90),Temperature 120 seconds after heating (dT120)",
-        "Measurement_type": "sensor_data",
-        "url": "https://litdb.fmi.fi/ext0002_data.php"
-    }
+  {
+    "name": "Snow scale – Oulanka Mäntykenttä",
+    "latitude": 66.37166,
+    "longitude": 29.31887,
+    "description": "Snow monitoring station at Oulanka Mäntykenttä forest site.",
+    "Measured_variable": "Snow Depth, Snow Water Equivalent",
+    "Measurement_type": "online sensor data",
+    "url": ""
+  },
+  {
+    "name": "Snow scale – Pallas Kenttärova",
+    "latitude": 67.98732,
+    "longitude": 24.24386,
+    "description": "Snow monitoring station at Pallas Kenttärova forest site.",
+    "Measured_variable": "Snow Depth, Snow Water Equivalent",
+    "Measurement_type": "online sensor data",
+    "url": ""
+  },
+  {
+    "name": "SPA snow pack analyser – Oulanka Puukkosuo",
+    "latitude": 66.37714,
+    "longitude": 29.30844,
+    "description": "Snow monitoring station at Oulanka Puukkosuo peatland site.",
+    "Measured_variable": "Snow Water Equivalent, Snow Depth, Snow Density, Snow Liquid Water Content",
+    "Measurement_type": "online sensor data",
+    "url": ""
+  },
+  {
+    "name": "DTS – Oulanka Research Station",
+    "latitude": 66.37152,
+    "longitude": 29.31904,
+    "description": "Distributed temperature sensing for snow and air temperature.",
+    "Measured_variable": "Snow Temperature, Air Temperature",
+    "Measurement_type": "offline sensor data",
+    "url": ""
+  },
+  {
+    "name": "Picarro isotope analyser – Oulanka",
+    "latitude": 66.37152,
+    "longitude": 29.31904,
+    "description": "Snow and air water vapor stable isotope measurements.",
+    "Measured_variable": "Water quality",
+    "Measurement_type": "offline sensor data",
+    "url": ""
+  },
+  {
+    "name": "GNSS-R snowpack – Oulanka Puukkosuo",
+    "latitude": 66.37723,
+    "longitude": 29.30826,
+    "description": "GNSS-reflectometry based snowpack measurements.",
+    "Measured_variable": "Snow Depth",
+    "Measurement_type": "offline sensor data",
+    "url": ""
+  },
+  {
+    "name": "GNSS-R snowpack – Pallas Lompolonjänkä",
+    "latitude": 67.99726,
+    "longitude": 24.20938,
+    "description": "GNSS-reflectometry based snowpack measurements.",
+    "Measured_variable": "Snow Depth",
+    "Measurement_type": "offline sensor data",
+    "url": ""
+  },
+  {
+    "name": "GNSS-R lake ice – Kuivasjärvi",
+    "latitude": 65.07002,
+    "longitude": 25.47482,
+    "description": "GNSS-reflectometry based lake ice thickness measurements.",
+    "Measured_variable": "Ice Thickness, Water Level",
+    "Measurement_type": "offline sensor data",
+    "url": ""
+  },
+  {
+    "name": "GNSS-R river ice – Kiiminkijoki",
+    "latitude": 65.19378,
+    "longitude": 25.41135,
+    "description": "GNSS-reflectometry based river ice thickness measurements.",
+    "Measured_variable": "Ice Thickness, Water Level",
+    "Measurement_type": "offline sensor data",
+    "url": ""
+  },
+  {
+    "name": "UAV survey (SfM) – Oulanka Puukkosuo",
+    "latitude": 66.37786,
+    "longitude": 29.30707,
+    "description": "Structure-from-Motion UAV surveys.",
+    "Measured_variable": "Snow Depth",
+    "Measurement_type": "UAV survey",
+    "url": "https://doi.org/10.23729/fd-15386b07-324e-3a47-86b1-e1a3a9845dba"
+  },
+  {
+    "name": "UAV survey (LiDAR) – Pallas",
+    "latitude": 67.99191,
+    "longitude": 24.22537,
+    "description": "LiDAR UAV snow line surveys.",
+    "Measured_variable": "Snow Depth, Snow Water Equivalent",
+    "Measurement_type": "UAV survey",
+    "url": "https://doi.org/10.23729/fd-561771be-24b6-354b-bdd7-1b2bb6068308"
+  },
+  {
+    "name": "UAV survey (LiDAR) – Sodankylä",
+    "latitude": 67.36601,
+    "longitude": 26.63041,
+    "description": "LiDAR UAV snow line surveys.",
+    "Measured_variable": "Snow Depth, Snow Water Equivalent",
+    "Measurement_type": "UAV survey",
+    "url": "https://doi.org/10.23729/fd-561771be-24b6-354b-bdd7-1b2bb6068308"
+  },
+  {
+    "name": "Reindeer GPS collars",
+    "latitude": null,
+    "longitude": null,
+    "description": "Reindeer GPS tracking collars.",
+    "Measurement_type": "campaign",
+    "url": ""
+  },
+  {
+    "name": "River ice cameras – Kiiminkijoki",
+    "latitude": null,
+    "longitude": null,
+    "description": "River ice monitoring cameras.",
+    "Measured_variable": "Ice Cover Presence",
+    "Measurement_type": "campaign",
+    "url": "https://crowdice.fi/cameras"
+  },
+  {
+    "name": "River ice pressure sensors – Kiiminkijoki",
+    "latitude": null,
+    "longitude": null,
+    "description": "River ice pressure and temperature sensors.",
+    "Measured_variable": "Water Level, Water Temperature",
+    "Measurement_type": "offline sensor data",
+    "url": ""
+  },
+  {
+    "name": "Snow & soil monitoring stations – Sodankylä region",
+    "latitude": null,
+    "longitude": null,
+    "description": "Network of snow and soil monitoring stations.",
+    "Measured_variable": "Snow Depth,Soil Water Content, Soil Temperature, Snow Temperature",
+    "Measurement_type": "online sensor data",
+    "url": "https://litdb.fmi.fi"
+  },
+  {
+    "name": "Percostation – Salla",
+    "latitude": 66.98964,
+    "longitude": 28.099174,
+    "description": "Unpaved road station monitoring soil, water and temperature.",
+    "Measured_variable": "Soil Water Content, Soil Temperature, Water Quality",
+    "Measurement_type": "online sensor data",
+    "url": ""
+  },
+  {
+    "name": "Percostation – Kolari",
+    "latitude": 67.275151389,
+    "longitude": 25.598625833,
+    "description": "Unpaved road station monitoring soil, water and temperature.",
+    "Measured_variable": "Soil Water Content, Soil Temperature, Water Quality",
+    "Measurement_type": "online sensor data",
+    "url": ""
+  },
+  {
+    "name": "Percostation – Rovaniemi",
+    "latitude": 67.058251389,
+    "longitude": 25.598625833,
+    "description": "Unpaved road station monitoring soil, water and temperature.",
+    "Measured_variable": "Soil Water Content, Soil Temperature, Water Quality",
+    "Measurement_type": "online sensor data",
+    "url": ""
+  }
 ]

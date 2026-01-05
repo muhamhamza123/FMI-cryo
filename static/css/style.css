@@ -1,0 +1,119 @@
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    height: 100vh;
+    overflow: hidden;
+}
+
+#navbar {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    height: 60px;
+    background: #fff;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 15px;
+    z-index: 1000;
+}
+
+#map {
+    position: absolute;
+    top: 60px;
+    bottom: 50px;
+    left: 0;
+    right: 0;
+}
+
+#filter-panel {
+    position: fixed;
+    top: 70px;
+    left: 50px;
+    width: 330px;
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    padding: 15px;
+    z-index: 950;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    height: 60%;
+    overflow-y: auto;
+}
+
+#filter-panel select {
+    height: 260px;
+    width: 100%;
+    overflow: auto;
+    padding: 5px;
+    font-size: 12px;
+}
+
+.buttons {
+    display: flex;
+    gap: 8px;
+}
+
+.buttons button {
+    flex: 1;
+    padding: 8px;
+    background: #0078d7;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+#footer {
+    position: fixed;
+    bottom: 0;
+    height: 50px;
+    width: 100%;
+    background: #fff;
+    border-top: 1px solid #ddd;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#toggle-filters {
+    display: none;
+}
+
+#no-results-panel {
+    color: #cc0000;
+    font-weight: bold;
+    text-align: center;
+}
+
+#no-results-panel.hidden {
+    display: none;
+}
+
+@media (max-width: 768px) {
+    #filter-panel {
+        left: 50%;
+        transform: translateX(-50%);
+        bottom: 0;
+        top: auto;
+        width: 90%;
+        display: none;
+    }
+
+    #toggle-filters {
+        display: block;
+        position: fixed;
+        bottom: 70px;
+        left: 50%;
+        transform: translateX(-50%);
+        padding: 10px 15px;
+        border-radius: 30px;
+        background: #0078d7;
+        color: white;
+        border: none;
+        z-index: 960;
+    }
+}
