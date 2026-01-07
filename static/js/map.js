@@ -1,11 +1,9 @@
-// Wait for DOM to be fully loaded
 document.addEventListener('DOMContentLoaded', function() {
     console.log('DOM loaded, initializing map...');
     initMap();
 });
 
 function initMap() {
-    // Fix for Leaflet marker icons
     delete L.Icon.Default.prototype._getIconUrl;
 
     L.Icon.Default.mergeOptions({
@@ -19,7 +17,7 @@ function initMap() {
 }
 
 function loadMapAndData() {
-    const map = L.map('map').setView([66.5, 26.0], 6); // Centered on Finland
+    const map = L.map('map').setView([66.5, 26.0], 6);
 
     const lightLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
     const darkLayer = L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png');
@@ -30,15 +28,10 @@ function loadMapAndData() {
 
     console.log('Map initialized');
 
-    // Add loading indicator
-    console.log('Map script loaded successfully');
-
     fetch('/locations')
         .then(r => {
             console.log('Fetch response status:', r.status);
-            if (!r.ok) {
-                throw new Error(`HTTP error! status: ${r.status}`);
-            }
+            if (!r.ok) throw new Error(`HTTP error! status: ${r.status}`);
             return r.json();
         })
         .then(data => {
@@ -55,7 +48,6 @@ function loadMapAndData() {
             panel.classList.remove('hidden');
         });
 
-    // Event listeners
     document.getElementById("theme-toggle").addEventListener("click", function() {
         toggleTheme(map, currentLayer, lightLayer, darkLayer);
     });
@@ -67,7 +59,6 @@ function loadMapAndData() {
     });
     document.getElementById("toggle-filters").addEventListener("click", toggleFilters);
 
-    // Store references for later use
     window.mapData = { map, allData, allMarkers, currentLayer, lightLayer, darkLayer };
 }
 
@@ -75,37 +66,40 @@ function populateFilters(data) {
     const varSelect = document.getElementById("variableFilter");
     const typeSelect = document.getElementById("typeFilter");
 
-    [...new Set(data.map(d => d.Measured_variable).filter(Boolean))]
-        .forEach(v => varSelect.add(new Option(v, v)));
+    const variablesSet = new Set();
+    data.forEach(d => {
+        if (d.Measured_variable) {
+            d.Measured_variable.split(',').map(v => v.trim()).forEach(v => variablesSet.add(v));
+        }
+    });
+
+    variablesSet.forEach(v => varSelect.add(new Option(v, v)));
 
     [...new Set(data.map(d => d.Measurement_type).filter(Boolean))]
         .forEach(t => typeSelect.add(new Option(t, t)));
 }
 
 function renderMarkers(data, map, allMarkers) {
-    // Clear existing markers
     allMarkers.forEach(m => map.removeLayer(m));
     allMarkers.length = 0;
 
     let skippedCount = 0;
 
     data.forEach((loc, index) => {
-        // Convert latitude and longitude to numbers
         const lat = parseFloat(loc.latitude);
         const lng = parseFloat(loc.longitude);
 
-        // Check if coordinates are valid
         if (!lat || !lng || isNaN(lat) || isNaN(lng)) {
             skippedCount++;
-            console.log(`Skipping location ${index} (invalid coords):`, loc.name, 'lat:', loc.latitude, 'lng:', loc.longitude);
+            console.log(`Skipping location ${index} (invalid coords):`, loc.name);
             return;
         }
 
-        console.log(`Adding marker ${allMarkers.length + 1}:`, loc.name, 'at', lat, lng);
+        console.log(`Adding marker ${allMarkers.length + 1}:`, loc.name);
 
         const link = loc.url && loc.url.trim()
             ? `<a href="${loc.url}" target="_blank">Dataset link</a>`
-            : `<i>Dataset link not available</i>`;
+            : `<span>URL pending — contact: <a href="mailto:${loc.contact || 'contact@domain.com'}">${loc.contact || 'contact@domain.com'}</a></span>`;
 
         const marker = L.marker([lat, lng])
             .bindPopup(`
@@ -127,27 +121,26 @@ function renderMarkers(data, map, allMarkers) {
         map.fitBounds(bounds.pad(0.2));
         console.log('Map fitted to bounds:', bounds);
     } else {
-        console.warn('⚠ No valid markers to display. Check your locations.json coordinates.');
+        console.warn('⚠ No valid markers to display.');
     }
 }
 
 function applyFilters(allData, map, allMarkers) {
-    const vars = [...document.getElementById("variableFilter").selectedOptions].map(o => o.value);
-    const types = [...document.getElementById("typeFilter").selectedOptions].map(o => o.value);
+    const selectedVars = [...document.getElementById("variableFilter").selectedOptions].map(o => o.value);
+    const selectedTypes = [...document.getElementById("typeFilter").selectedOptions].map(o => o.value);
 
-    const filtered = allData.filter(d =>
-        (!vars.length || vars.includes(d.Measured_variable)) &&
-        (!types.length || types.includes(d.Measurement_type))
-    );
+    const filtered = allData.filter(d => {
+        const rowVars = d.Measured_variable ? d.Measured_variable.split(',').map(v => v.trim()) : [];
+        const matchesVar = !selectedVars.length || selectedVars.some(v => rowVars.includes(v));
+        const matchesType = !selectedTypes.length || selectedTypes.includes(d.Measurement_type);
+        return matchesVar && matchesType;
+    });
 
     console.log(`Filtering: ${filtered.length} items match criteria`);
     renderMarkers(filtered, map, allMarkers);
+
     const panel = document.getElementById("no-results-panel");
-    if (filtered.length) {
-        panel.classList.add('hidden');
-    } else {
-        panel.classList.remove('hidden');
-    }
+    filtered.length ? panel.classList.add('hidden') : panel.classList.remove('hidden');
 }
 
 function resetFilters(allData, map, allMarkers) {
@@ -168,9 +161,5 @@ function toggleTheme(map, currentLayer, lightLayer, darkLayer) {
 
 function toggleFilters() {
     const panel = document.getElementById("filter-panel");
-    if (panel.style.display === "flex") {
-        panel.style.display = "none";
-    } else {
-        panel.style.display = "flex";
-    }
+    panel.style.display = panel.style.display === "flex" ? "none" : "flex";
 }
